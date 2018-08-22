@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlt_parent"
+        android:background="@color/light_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_3x"
+        android:layout_marginRight="@dimen/dimen_3x"
+        android:layout_centerInParent="true">
+            <TextView
+                android:id="@+id/tv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimen_x2x"
+                android:padding="@dimen/dimen_05x"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:text="Bạn có muốn cập nhật tài khoản hiện tại cho sim xxxxxx không ?"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tv_msg"
+            android:layout_marginRight="@dimen/dimen_4x"
+            android:layout_marginLeft="@dimen/dimen_4x"
+            android:layout_height="@dimen/dimen_6x">
+
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/dimen_5x"
+                android:layout_below="@id/tv_msg"
+                android:layout_marginTop="@dimen/dimen_05x"
+                android:background="@drawable/press_button_color"
+                android:layout_marginBottom="@dimen/dimen_05x"
+                android:layout_marginRight="@dimen/dimen_1x"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:text="Có"/>
+
+            <Button
+                android:id="@+id/btn_no"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/dimen_5x"
+                android:layout_below="@id/tv_msg"
+                android:layout_marginTop="@dimen/dimen_05x"
+                android:background="@drawable/press_button_color"
+                android:layout_marginBottom="@dimen/dimen_05x"
+                android:layout_marginRight="@dimen/dimen_05x"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:text="Không"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

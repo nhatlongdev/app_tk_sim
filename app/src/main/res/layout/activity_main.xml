@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_4x"
+        android:background="@color/color_header"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="THỐNG KÊ SIM THẺ"/>
+    <RelativeLayout
+        android:id="@+id/rlt_content"
+        android:layout_below="@+id/tv_title"
+        android:paddingTop="@dimen/dimen_2x"
+        android:paddingBottom="@dimen/dimen_2x"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/li_row"
+        android:layout_below="@+id/rlt_content"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <Button
+            android:id="@+id/btn_tk_sim"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/press_button_color"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/dimen_2x"
+            android:padding="@dimen/dimen_1x"
+            android:text="Thống kê sim"/>
+
+        <Button
+            android:id="@+id/btn_update_tk_sim"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/press_button_color"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/dimen_2x"
+            android:padding="@dimen/dimen_1x"
+            android:text="Cập nhật tài khoản sim"/>
+
+    </LinearLayout>
+</LinearLayout>

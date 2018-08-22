@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- main color -->
+    <color name="colorPrimary">#F44336</color>
+    <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="lightColorPrimary">#FFCDD2</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="dividerColor">#B6B6B6</color>
+
+    <!-- base color -->
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#F44336</color>
+    <color name="transparent_red">#CCF44336</color>
+    <color name="transparent_black">#CC000000</color>
+    <color name="blue">#2196F3</color>
+    <color name="green">#4CAF50</color>
+    <color name="yellow">#f8e71c</color>
+    <color name="transparent_yellow">#26f8e71c</color>
+    <color name="yellowDark">#f5a623</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="light_grey">#f6f6f6</color>
+    <color name="text_notify_network">#607D8B</color>
+    <color name="transparent_resa">#CCe1e8e4</color>
+    <color name="transparent_resa_blue">#CC349727</color>
+    <color name="transparent_dish">#BF8ee483</color>
+    <color name="transparent_resa_blue_1">#F214350c</color>
+    <color name="transparent_resa_bg">#8014350c</color>
+    <color name="transparent_black_new_shop">#66080101</color>
+    <color name="transparent_black_new_border">#991a1818</color>
+    <color name="transparent_resa_no">#00ffffff</color>
+    <color name="bg_item_tt_shop">#99a6c2c2</color>
+    <color name="transparent_input_email">#F20e1f0d</color>
+    <color name="transparent_input_nhat">#D90e1f0d</color>
+    <color name="color_cofirm_email">#e8ecf0</color>
+    <color name="transpa">#0Dffffff</color>
+
+    <!-- social -->
+    <color name="facebook">#48649f</color>
+    <color name="google">#de3b45</color>
+    <color name="facebook_pressed">#FF577ECF</color>
+    <color name="google_pressed">#FFF4404B</color>
+    <color name="bluee">#000088</color>
+    <color name="tab_choose">#b1b412</color>
+    <color name="tb_empty">#d9e2e2</color>
+    <color name="tb_guest_put">#a6c2c2</color>
+    <color name="tb_guest_wait">#88aeae</color>
+    <color name="tb_guest_call">#61cb7a</color>
+    <color name="tb_pay">#61cb7a</color>
+    <color name="tb_merge">#536b7f</color>
+    <color name="tb_exit">#f6cd3b</color>
+    <color name="tb_kitbar">#f6cd3b</color>
+    <color name="tb_put_empty">#536b7f</color>
+
+    <!-- Tabs colors -->
+    <color name="unselected_tab_text">#96c2e0</color>
+
+    <!-- splash screen -->
+    <color name="bg_transparent">#88000000</color>
+    <color name="bg_transparent_blue">#8ee483</color>
+
+    <!-- about us -->
+    <color name="grey_hard">#454545</color>
+    <color name="grey_light">#ededed</color>
+    <color name="grey_bold">#919191</color>
+    <color name="grey_prior1">#c5d5d5</color>
+    <color name="black_transparent">#BF000000</color>
+    <!-- help -->
+    <color name="bg_item_help_group">#f6f6f6</color>
+    <color name="color_header">#349727</color>
+    <color name="bg_tr">#15723b</color>
+    <color name="color_sum_dish">#51a645</color>
+    <color name="color_list_order_wait">#ec8e7f</color>
+    <color name="prioritize1">#e8c651</color>
+    <color name="prioritize2">#80a8c8</color>
+    <color name="prioritize3">#89d49a</color>
+    <color name="item_bill">#55a74e</color>
+    <color name="bg_one_shop">#e3e9e4</color>
+    <color name="no_active">#99cb93</color>
+    <color name="bg_split_bill">#ebebeb</color>
+    <color name="remove_order">#ebebeb</color>
+
+    <color name="background_table">#9dadb2</color>
+    <color name="table_empty">#d9e2e2</color>
+    <color name="table_put">#a6c2c2</color>
+    <color name="table_guest">#88aeae</color>
+    <color name="table_busy">#536b7f</color>
+    <color name="remove_dish">#f6cd3b</color>
+    <color name="guest_call">#61cb7a</color>
+
+    <color name="color_text_blue">#010680</color>
+    <color name="color_text_orange">#e95a11</color>
+    <color name="color_text_red">#d63148</color>
+
+    <color name="bg_status_order">#94e0f6</color>
+
+    <color name="text_put_guest">#d4904d</color>
+    <color name="text_put_put">#0561dd</color>
+    <color name="text_doing">#4c0567</color>
+    <color name="text_finish">#178090</color>
+    <color name="bg_bill_title">#55a74e</color>
+    <color name="bg_bill_1">#84d6ef</color>
+    <color name="bg_bill_2">#f9fb21</color>
+    <color name="bg_bill_3">#f3a13a</color>
+    <color name="bg_bill_4">#4120e8</color>
+    <color name="mau_tim">#0b1faa</color>
+    <color name="text_color">#5589aa</color>
+
+    <!--color text list shop-->
+    <color name="text_name_shop">#d4ff60</color>
+    <color name="text_name_address">#7af66a</color>
+    <color name="bg_bottom_shop">#CC11562b</color>
+    <color name="bg_border_shop">#15470e</color>
+    <color name="bg_list_order">#d4f3d0</color>
+    <color name="bg_color_ban_dat">#CC0b2423</color>
+    <color name="bg_color_content_ban_dat">#CC57625b</color>
+    <color name="bg_color_search">#CCffffff</color>
+
+    <!--color bg setting-->
+    <color name="bg_title_setting">#04643c</color>
+    <color name="bg_content_setting">#2b6f58</color>
+    <color name="bg_item_select_setting">#3e907e</color>
+    <color name="bg_item_no_select_setting">#64a290</color>
+    <color name="font_detail_order">#0e4706</color>
+    <color name="font_name_employee">#0d949e</color>
+
+    <color name="bg_detail_order_select">#fcf9e2</color>
+    <color name="bg_bill_payed">#dcf9d8</color>
+    <color name="bg_order_focus">#e5d80b</color>
+    <color name="bg_bill_focus">#f7fbbb</color>
+    <color name="bg_dish_text">#3c7b6c</color>
+    <color name="bg_category_text">#f8d907</color>
+    <color name="bg_text_click">#b8cce2</color>
+
+    <color name="bg_infor">#ebfce8</color>
+
+    <color name="button_pressed">#ff8a00</color>
+    <color name="button_focused">#ff8a00</color>
+    <color name="button_default">#1c76bb</color>
+
+    <color name="button_pressed_tt_table">#d63148</color>
+    <color name="button_focused_tt_table">#d63148</color>
+    <color name="button_default_tt_table">#BF8ee483</color>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlt_parent"
+        android:background="@color/light_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_3x"
+        android:layout_marginRight="@dimen/dimen_3x"
+        android:layout_centerInParent="true">
+            <TextView
+                android:id="@+id/tv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimen_2x"
+                android:padding="@dimen/dimen_05x"
+                android:gravity="center"
+                android:text="Để thực hiện thao tác nạp thẻ bạn phải bật app trong ACCESSIBILITY_SETTINGS ?"/>
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="@dimen/dimen_12x"
+                android:layout_height="@dimen/dimen_5x"
+                android:layout_below="@id/tv_msg"
+                android:layout_marginTop="@dimen/dimen_05x"
+                android:background="@drawable/press_button_color"
+                android:layout_marginBottom="@dimen/dimen_05x"
+                android:layout_marginRight="@dimen/dimen_05x"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:text="Đồng ý"/>
+    </RelativeLayout>
+</RelativeLayout>
