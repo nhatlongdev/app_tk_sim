@@ -90,37 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(View v) {
                         dialogUpdateSim.dismiss();
                         //GỌI *101#
-                        if(checkAvailability() == true){
-                            callPhoneNumber();
-                        }else {
-                            dialog = new Dialog(getApplication());
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.dialog_accessibility);
-                            Button btnYes = dialog.findViewById(R.id.btn_yes);
-                            btnYes.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    SetupHelper.openAccessibilitySettings(getApplicationContext());
-                                    dialog.dismiss();
-                                }
-                            });
-                            Window window = dialog.getWindow();
-                            window.setBackgroundDrawableResource(R.color.transparent);
-                            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
-                            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                            WindowManager.LayoutParams wmlpMsgwindow_the_loi = dialog.getWindow().getAttributes();
-                            wmlpMsgwindow_the_loi.gravity = Gravity.CENTER;
-                            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            dialog.setCancelable(false);
-                            dialog.show();
-                        }
-
+                        processUpdateTkSim();
                     }
                 });
 
@@ -202,6 +172,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+    //Hàm xử lý gọi *101#
+    public void processUpdateTkSim(){
+        if(checkAvailability() == true){
+            callPhoneNumber();
+        }else {
+            dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_accessibility);
+            Button btnYes = dialog.findViewById(R.id.btn_yes);
+            btnYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SetupHelper.openAccessibilitySettings(MainActivity.this);
+                    dialog.dismiss();
+                }
+            });
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawableResource(R.color.transparent);
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            WindowManager.LayoutParams wmlpMsgwindow_the_loi = dialog.getWindow().getAttributes();
+            wmlpMsgwindow_the_loi.gravity = Gravity.CENTER;
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.setCancelable(false);
+            dialog.show();
         }
     }
 
