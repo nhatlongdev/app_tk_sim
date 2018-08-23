@@ -7,28 +7,287 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_4x"
-        android:background="@color/color_header"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="THỐNG KÊ SIM THẺ"/>
     <RelativeLayout
-        android:id="@+id/rlt_content"
-        android:layout_below="@+id/tv_title"
-        android:paddingTop="@dimen/dimen_2x"
-        android:paddingBottom="@dimen/dimen_2x"
+        android:id="@+id/view_top"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="@dimen/dimen_5x"
+        android:background="@color/color_header">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_5x"
+            android:background="@color/color_header"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="THỐNG KÊ SIM THẺ"/>
+        <ImageView
+            android:id="@+id/img_refresh"
+            android:layout_width="@dimen/dimen_5x"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/dimen_05x"
+            android:tint="@color/bluee"
+            android:layout_marginRight="@dimen/dimen_05x"
+            android:src="@drawable/refresh"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_2x"
+        android:paddingBottom="@dimen/dimen_2x">
+        <ProgressBar
+            android:id="@+id/pro_bar"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_2x"
+            android:backgroundTint="@color/bluee"
+            android:layout_width="@dimen/dimen_5x"
+            android:layout_height="@dimen/dimen_5x" />
+        <LinearLayout
+            android:id="@+id/li_infor_sum"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng tiền ngày hôm nay: "/>
+                <TextView
+                    android:id="@+id/tv_sum_money_today"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textColor="@color/bluee"
+                    android:textStyle="bold"
+                    android:text="10.000.000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số thẻ ngày hôm nay: "/>
+                <TextView
+                    android:id="@+id/tv_sum_sim_today"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textColor="@color/bluee"
+                    android:textStyle="bold"
+                    android:text="46"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số tiền ngày hôm qua: "/>
+                <TextView
+                    android:id="@+id/tv_sum_money_yesterday"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/grey_hard"
+                    android:textStyle="bold"
+                    android:text="46.000.000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số thẻ ngày hôm qua: "/>
+                <TextView
+                    android:id="@+id/tv_sum_sim_yesterday"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/grey_hard"
+                    android:textStyle="bold"
+                    android:text="53"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số tiền tháng này: "/>
+                <TextView
+                    android:id="@+id/tv_sum_money_this_month"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/grey_hard"
+                    android:textStyle="bold"
+                    android:text="53.000.000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số thẻ tháng này: "/>
+                <TextView
+                    android:id="@+id/tv_sum_sim_this_month"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/grey_hard"
+                    android:textStyle="bold"
+                    android:text="120"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số tiền tháng trước: "/>
+                <TextView
+                    android:id="@+id/tv_sum_money_last_month"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/grey_hard"
+                    android:textStyle="bold"
+                    android:text="53.000.000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dimen_1x"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng số thẻ tháng trước: "/>
+                <TextView
+                    android:id="@+id/tv_sum_sim_last_month"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="@color/grey_hard"
+                    android:textStyle="bold"
+                    android:text="120"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/msg_error"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dimen_2x"
+            android:text="Không tải được dữ liệu thống kê, vui lòng kiểm tra kết nối mạng!"/>
 
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/li_row"
-        android:layout_below="@+id/rlt_content"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="100dp">

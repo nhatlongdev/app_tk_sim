@@ -6,7 +6,7 @@
     <RelativeLayout
         android:id="@+id/view_top"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_4x"
+        android:layout_height="@dimen/dimen_5x"
         android:background="@color/color_header">
         <TextView
             android:id="@+id/tv_title"
@@ -19,7 +19,7 @@
             android:text="DANH SÁCH SIM"/>
         <ImageView
             android:id="@+id/img_back"
-            android:layout_width="@dimen/dimen_4x"
+            android:layout_width="@dimen/dimen_5x"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:padding="@dimen/dimen_x05x"
@@ -130,7 +130,7 @@
                     android:layout_alignParentBottom="true"
                     android:background="@color/black"/>
                 <AutoCompleteTextView
-                    android:id="@+id/edt_ma_kh"
+                    android:id="@+id/edt_input_sim"
                     android:layout_below="@+id/view111"
                     android:layout_toLeftOf="@+id/view333"
                     android:layout_toRightOf="@+id/view222"
@@ -184,7 +184,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
                     android:layout_height="@dimen/dimen_8x"
-                    android:textColor="@color/black"
+                    android:textColor="@color/bluee"
                     android:gravity="center"
                     android:text="SIM"/>
 
@@ -205,7 +205,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textColor="@color/black"
+                            android:textColor="@color/bluee"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="NẠP THẺ"/>
@@ -216,7 +216,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textColor="@color/black"
+                            android:textColor="@color/bluee"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="MUA IAP"/>
@@ -235,7 +235,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1.2"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:textColor="@color/blue"
                             android:gravity="center"
                             android:text="Số dư"/>
                         <View
@@ -246,7 +246,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:textColor="@color/blue"
                             android:gravity="center"
                             android:text="Ngày"/>
                         <View
@@ -257,7 +257,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1.2"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:textColor="@color/blue"
                             android:gravity="center"
                             android:text="Số dư"/>
                         <View
@@ -268,7 +268,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:textColor="@color/blue"
                             android:gravity="center"
                             android:text="Ngày"/>
                     </LinearLayout>
@@ -281,59 +281,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/black"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_4x"
-                android:orientation="horizontal"
-                android:layout_below="@+id/view_content_1">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="match_parent"
-                    android:textSize="13dp"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:text="...472126"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1.2"
-                        android:layout_height="match_parent"
-                        android:textSize="13dp"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:text="5.000.000"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:textSize="13dp"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:text="23/11/18"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1.2"
-                        android:layout_height="match_parent"
-                        android:textSize="13dp"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:text="4.000.000"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:textSize="13dp"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:text="17/8/18"/>
-                </LinearLayout>
 
-            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_list_sim"
+                android:layout_below="@+id/view_content_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+
+            <ProgressBar
+                android:id="@+id/pr_bar"
+                android:visibility="invisible"
+                android:layout_below="@+id/view_content_1"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_width="@dimen/dimen_4x"
+                android:layout_height="@dimen/dimen_4x" />
 
         </RelativeLayout>
 
