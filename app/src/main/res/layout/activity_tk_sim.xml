@@ -179,14 +179,29 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_8x">
-
-                <TextView
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
-                    android:layout_height="@dimen/dimen_8x"
-                    android:textColor="@color/bluee"
-                    android:gravity="center"
-                    android:text="SIM"/>
+                    android:layout_height="@dimen/dimen_8x">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bluee"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="SIM"/>
+                    <TextView
+                        android:id="@+id/tv_sum_sim"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:layout_marginTop="@dimen/dimen_1x"
+                        android:layout_marginRight="@dimen/dimen_05x"
+                        android:background="@drawable/background_circle"
+                        android:layout_width="@dimen/dimen_3x"
+                        android:layout_height="@dimen/dimen_3x" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="0.5dp"

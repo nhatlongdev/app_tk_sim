@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,17 +24,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.computer.thongkesimcard.R;
+import com.example.computer.thongkesimcard.adapter.ContactSimAdapter;
 import com.example.computer.thongkesimcard.adapter.SimAdapter;
 import com.example.computer.thongkesimcard.configs.Apis;
 import com.example.computer.thongkesimcard.configs.GlobalValue;
 import com.example.computer.thongkesimcard.listener.IOnItemClickedListener;
+import com.example.computer.thongkesimcard.listener.OnLoadMoreListener;
 import com.example.computer.thongkesimcard.modelmanager.RequestQueueSingleton;
+import com.example.computer.thongkesimcard.obj.Sim;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +54,8 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
     public JSONArray jsonData;
     public AutoCompleteTextView edtSim;
     public ProgressBar proBar;
+    public List<Sim> listSim;
+    public TextView tvSumSim;
     /*mảng option lọc danh sách sim*/
     public String arr[]={
             "Tất cả",
@@ -63,11 +70,14 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
     // queue request server
     public RequestQueue requestQueue;
 
+    public boolean isLoadMore = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tk_sim);
         getSupportActionBar().hide();
+        listSim = new ArrayList<>();
         GlobalValue.arrSuggestNameSim = new ArrayList<>();
         requestQueue = RequestQueueSingleton.getInstance(this).getRequestQueue();
         //Tham chiếu
@@ -79,6 +89,7 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
         btnSearch = findViewById(R.id.tv_search);
         edtSim = findViewById(R.id.edt_input_sim);
         proBar = findViewById(R.id.pr_bar);
+        tvSumSim = findViewById(R.id.tv_sum_sim);
         jsonData = new JSONArray();
         //Gán Data source (arr) vào Adapter
         ArrayAdapter<String> adapter=new ArrayAdapter<String>
@@ -98,8 +109,8 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                 if(i == 6 ){
                     liParent.addView(rltNhapSim, 1);
                     edtSim = findViewById(R.id.edt_input_sim);
-                    //cập nhật list suggest
-                    setDataForSuggestAutoComplete();
+//                    //cập nhật list suggest
+//                    setDataForSuggestAutoComplete();
                     try {
                         GlobalValue.jsonSimSelected.put("code",i+"");
                     } catch (JSONException e) {
@@ -112,6 +123,7 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                             try {
                                 GlobalValue.jsonSimSelected.put("code","-1");
                                 GlobalValue.jsonSimSelected.put("text","");
+                                GlobalValue.jsonSimSelected.put("page",1);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -119,6 +131,7 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                             try {
                                 GlobalValue.jsonSimSelected.put("code",i+"");
                                 GlobalValue.jsonSimSelected.put("text","");
+                                GlobalValue.jsonSimSelected.put("page",1);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -133,19 +146,11 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        //add thuộc tính option lọc cho obj global.simselected
-        try {
-            GlobalValue.jsonSimSelected.put("code","-1");
-            GlobalValue.jsonSimSelected.put("text","");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        //RECYCLERVIEW
+        rcvListSim = findViewById(R.id.rcv_list_sim);
 
         //GOI API FILTER
         filterSim(GlobalValue.jsonSimSelected);
-
-        //RECYCLERVIEW
-        rcvListSim = findViewById(R.id.rcv_list_sim);
 
         imgBack.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
@@ -159,6 +164,11 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.tv_search:
                 if(GlobalValue.jsonSimSelected!= null){
+                    try {
+                        GlobalValue.jsonSimSelected.put("page",1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     if(jsonData != null){
                         jsonData = new JSONArray();
                         //notifi data
@@ -191,17 +201,34 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
     public void refreshListView(){
         Log.d("log_app","jsonData: " + jsonData.toString());
         Log.d("log_app","jsonData.length: " + jsonData.length());
-        simAdapter = new SimAdapter(ThongKeSimActivity.this, jsonData, new IOnItemClickedListener() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThongKeSimActivity.this,LinearLayoutManager.VERTICAL,false);
+        rcvListSim.setLayoutManager(linearLayoutManager);
+        simAdapter = new SimAdapter(rcvListSim,this,jsonData, new IOnItemClickedListener() {
             @Override
             public void onItemClicked(int position, View view) {
 
             }
         });
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThongKeSimActivity.this,LinearLayoutManager.VERTICAL,false);
-        rcvListSim.setLayoutManager(linearLayoutManager);
         rcvListSim.setAdapter(simAdapter);
         simAdapter.notifyDataSetChanged();
+
+        simAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if(GlobalValue.jsonSimSelected.optString("code").equals("-1")){
+                    isLoadMore = true;
+                    jsonData.put(null);
+                    simAdapter.notifyItemInserted(jsonData.length() - 1);
+                    try {
+                        GlobalValue.jsonSimSelected.put("page",GlobalValue.jsonSimSelected.optInt("page")+1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //Goi APi lay data
+                    filterSim(GlobalValue.jsonSimSelected);
+                }
+            }
+        });
     }
 
     //Hàm set suggest auto
@@ -222,7 +249,7 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
             Matcher matcher = pattern.matcher(text);
             if(!matcher.matches()){
                 result = "Định dạng sim không đúng, vui lòng thử lại";
-            }else if(text.length() != 20){
+            }else if(text.length() > 20 && text.length() <5){
                 result = "Độ dài chuỗi không hợp lệ, vui lòng kiểm tra lại";
             }
         }
@@ -231,14 +258,16 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
 
     /* ham update tài khoản cho sim*/
     public void filterSim(final JSONObject jsonParams){
-        proBar.setVisibility(View.VISIBLE);
+        if(isLoadMore != true){
+            proBar.setVisibility(View.VISIBLE);
+        }
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("simNumber", jsonParams.optString("serial_number"));
             jsonObject.put("code", jsonParams.optString("code"));
             jsonObject.put("text", jsonParams.optString("text"));
-            jsonObject.put("page", 1);
-            jsonObject.put("limit", 100);
+            jsonObject.put("page", jsonParams.optInt("page"));
+            jsonObject.put("limit", 20);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -253,28 +282,61 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                             //TO TO
                             Log.d("log_app","FILTER SIM: " + response.toString());
                             if(response.optJSONObject("res") != null){
+                                //set so luong sim cho text
+                                tvSumSim.setText(response.optJSONObject("res").optInt("count")+"");
+
                                 if(GlobalValue.jsonSimSelected.optString("code").equals("6") && response.optJSONObject("res").optInt("count") == 0){
                                     Toast.makeText(ThongKeSimActivity.this, "Không tìm thấy sim, vui lòng kiểm tra lại", Toast.LENGTH_SHORT).show();
                                 }
-                                try {
-                                    Log.d("log_app","Data: " + response.optJSONObject("res").optJSONArray("sims").toString());
-                                    jsonData = new JSONArray(response.optJSONObject("res").optJSONArray("sims").toString());
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                if(jsonData != null){
-                                    if(GlobalValue.arrSuggestNameSim.size() == 0){
-                                        pushElementToArrSuggest(jsonData);
+                                if(isLoadMore == true){
+                                    jsonData.remove(jsonData.length()-1);
+                                    simAdapter.notifyItemRemoved(jsonData.length());
+                                    if(response.optJSONObject("res").optJSONArray("sims").length()>0){
+                                        String jsonTam = jsonData.toString().replace("[","");
+                                        String jsonDataTong = jsonTam.replace("]","");
+                                        String jsonTamNew = response.optJSONObject("res").optJSONArray("sims").toString().replace("[","");
+                                        String jsonDataLoadMore = jsonTamNew.replace("]","");
+                                        String jsonDataTongNew = "[" + jsonDataTong + "," + jsonDataLoadMore +"]";
+                                        try {
+                                            jsonData = new JSONArray(jsonDataTongNew);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        //notifi data
+                                        refreshListView();
+
+                                        simAdapter.setLoaded();
+                                        Log.d("log_app","JSON DATA: " + jsonData.toString());
+                                        Log.d("log_app","CHay vao day: " + jsonData.length());
+                                    }else {
+                                        Log.d("log_app","HET DU LIEU" + jsonData.length());
                                     }
-                                    //notifi data
-                                    refreshListView();
+
+                                }else {
+                                    try {
+                                        Log.d("log_app","Data: " + response.optJSONObject("res").optJSONArray("sims").toString());
+                                        jsonData = new JSONArray(response.optJSONObject("res").optJSONArray("sims").toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if(jsonData != null){
+//                                        if(GlobalValue.arrSuggestNameSim.size() == 0){
+//                                            pushElementToArrSuggest(jsonData);
+//                                        }
+                                        //notifi data
+                                        refreshListView();
+                                    }
                                 }
+                                isLoadMore = false;
+                            }else {
+                                tvSumSim.setText("0");
                             }
                         }else {
                             //FAILSE
                             if(response.optJSONObject("error") != null && response.optJSONObject("error").optString("text") != null){
                                 Toast.makeText(ThongKeSimActivity.this, response.optJSONObject("error").optString("text"), Toast.LENGTH_SHORT).show();
                             }
+                            tvSumSim.setText("0");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -283,6 +345,7 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                 proBar.setVisibility(View.INVISIBLE);
                 //LỖI VOLLEY
                 Toast.makeText(ThongKeSimActivity.this, "Không tải được dữ liệu, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                tvSumSim.setText("0");
             }
         });
         jsonObjectRequest.setTag("APP");

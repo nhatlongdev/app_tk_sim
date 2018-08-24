@@ -118,6 +118,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_tk_sim:
+                try {
+                    GlobalValue.jsonSimSelected.put("page",1);
+                    GlobalValue.jsonSimSelected.put("code","-1");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 AppUtil.startActivity(this,ThongKeSimActivity.class);
                 break;
             case R.id.btn_update_tk_sim:
