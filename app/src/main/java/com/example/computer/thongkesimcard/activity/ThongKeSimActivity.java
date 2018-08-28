@@ -1,6 +1,7 @@
 package com.example.computer.thongkesimcard.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,9 +70,6 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
 
     // queue request server
     public RequestQueue requestQueue;
-
-    public boolean isLoadMore = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +146,33 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
 
         //RECYCLERVIEW
         rcvListSim = findViewById(R.id.rcv_list_sim);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThongKeSimActivity.this,LinearLayoutManager.VERTICAL,false);
+        rcvListSim.setLayoutManager(linearLayoutManager);
+        simAdapter = new SimAdapter(rcvListSim,this,listSim, new IOnItemClickedListener() {
+            @Override
+            public void onItemClicked(int position, View view) {
 
+            }
+        });
+        rcvListSim.setAdapter(simAdapter);
+
+        simAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                Log.d("log_app_","CO CHAY VAO LOAD MORE ");
+                if(listSim.size()>=20){
+                    jsonData.put(null);
+                    simAdapter.notifyItemInserted(listSim.size() - 1);
+                    try {
+                        GlobalValue.jsonSimSelected.put("page",GlobalValue.jsonSimSelected.optInt("page")+1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //Goi APi lay data
+                    filterSim(GlobalValue.jsonSimSelected);
+                }
+            }
+        });
         //GOI API FILTER
         filterSim(GlobalValue.jsonSimSelected);
 
@@ -164,16 +188,14 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.tv_search:
                 if(GlobalValue.jsonSimSelected!= null){
+                    listSim.clear();
+                    simAdapter.notifyDataSetChanged();
                     try {
                         GlobalValue.jsonSimSelected.put("page",1);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if(jsonData != null){
-                        jsonData = new JSONArray();
-                        //notifi data
-                        refreshListView();
-                    }
+
                     if(!GlobalValue.jsonSimSelected.optString("code").equals("6")){
                         //GOI API FILTER
                         filterSim(GlobalValue.jsonSimSelected);
@@ -190,45 +212,12 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                             }
                             //GOI API FILTER
                             filterSim(GlobalValue.jsonSimSelected);
+
                         }
                     }
                 }
                 break;
         }
-    }
-
-    //Ham xu ly notifi list view
-    public void refreshListView(){
-        Log.d("log_app","jsonData: " + jsonData.toString());
-        Log.d("log_app","jsonData.length: " + jsonData.length());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThongKeSimActivity.this,LinearLayoutManager.VERTICAL,false);
-        rcvListSim.setLayoutManager(linearLayoutManager);
-        simAdapter = new SimAdapter(rcvListSim,this,jsonData, new IOnItemClickedListener() {
-            @Override
-            public void onItemClicked(int position, View view) {
-
-            }
-        });
-        rcvListSim.setAdapter(simAdapter);
-        simAdapter.notifyDataSetChanged();
-
-        simAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                if(GlobalValue.jsonSimSelected.optString("code").equals("-1")){
-                    isLoadMore = true;
-                    jsonData.put(null);
-                    simAdapter.notifyItemInserted(jsonData.length() - 1);
-                    try {
-                        GlobalValue.jsonSimSelected.put("page",GlobalValue.jsonSimSelected.optInt("page")+1);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    //Goi APi lay data
-                    filterSim(GlobalValue.jsonSimSelected);
-                }
-            }
-        });
     }
 
     //Hàm set suggest auto
@@ -249,7 +238,7 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
             Matcher matcher = pattern.matcher(text);
             if(!matcher.matches()){
                 result = "Định dạng sim không đúng, vui lòng thử lại";
-            }else if(text.length() > 20 && text.length() <5){
+            }else if(text.length() > 20 || text.length() <5){
                 result = "Độ dài chuỗi không hợp lệ, vui lòng kiểm tra lại";
             }
         }
@@ -258,9 +247,8 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
 
     /* ham update tài khoản cho sim*/
     public void filterSim(final JSONObject jsonParams){
-        if(isLoadMore != true){
-            proBar.setVisibility(View.VISIBLE);
-        }
+        Log.d("log_app_","CHAY HAM LAY DS");
+        proBar.setVisibility(View.VISIBLE);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("simNumber", jsonParams.optString("serial_number"));
@@ -271,7 +259,6 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("log_app","PARAMS FILTER: " + jsonObject.toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Apis.URL_FILTER_SIM, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -280,54 +267,26 @@ public class ThongKeSimActivity extends AppCompatActivity implements View.OnClic
                         boolean status = response.optBoolean("s");
                         if(status == true){
                             //TO TO
-                            Log.d("log_app","FILTER SIM: " + response.toString());
                             if(response.optJSONObject("res") != null){
                                 //set so luong sim cho text
                                 tvSumSim.setText(response.optJSONObject("res").optInt("count")+"");
-
-                                if(GlobalValue.jsonSimSelected.optString("code").equals("6") && response.optJSONObject("res").optInt("count") == 0){
-                                    Toast.makeText(ThongKeSimActivity.this, "Không tìm thấy sim, vui lòng kiểm tra lại", Toast.LENGTH_SHORT).show();
-                                }
-                                if(isLoadMore == true){
-                                    jsonData.remove(jsonData.length()-1);
-                                    simAdapter.notifyItemRemoved(jsonData.length());
-                                    if(response.optJSONObject("res").optJSONArray("sims").length()>0){
-                                        String jsonTam = jsonData.toString().replace("[","");
-                                        String jsonDataTong = jsonTam.replace("]","");
-                                        String jsonTamNew = response.optJSONObject("res").optJSONArray("sims").toString().replace("[","");
-                                        String jsonDataLoadMore = jsonTamNew.replace("]","");
-                                        String jsonDataTongNew = "[" + jsonDataTong + "," + jsonDataLoadMore +"]";
-                                        try {
-                                            jsonData = new JSONArray(jsonDataTongNew);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        //notifi data
-                                        refreshListView();
-
-                                        simAdapter.setLoaded();
-                                        Log.d("log_app","JSON DATA: " + jsonData.toString());
-                                        Log.d("log_app","CHay vao day: " + jsonData.length());
-                                    }else {
-                                        Log.d("log_app","HET DU LIEU" + jsonData.length());
-                                    }
-
-                                }else {
-                                    try {
-                                        Log.d("log_app","Data: " + response.optJSONObject("res").optJSONArray("sims").toString());
-                                        jsonData = new JSONArray(response.optJSONObject("res").optJSONArray("sims").toString());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if(jsonData != null){
-//                                        if(GlobalValue.arrSuggestNameSim.size() == 0){
-//                                            pushElementToArrSuggest(jsonData);
-//                                        }
-                                        //notifi data
-                                        refreshListView();
+                                if(response.optJSONObject("res").optJSONArray("sims")!= null){
+                                    for (int i=0; i<response.optJSONObject("res").optJSONArray("sims").length(); i++){
+                                        JSONObject jsonSim = response.optJSONObject("res").optJSONArray("sims").optJSONObject(i);
+                                        Sim sim = new Sim();
+                                        sim.setName(jsonSim.optString("simNumber"));
+                                        sim.setMoneyNap(jsonSim.optInt("accountBalance"));
+                                        sim.setMoneyMua(jsonSim.optInt("clientAccountBalance"));
+                                        sim.setDateNap(jsonSim.optString("lastUpdated"));
+                                        sim.setDateMua(jsonSim.optString("clientUpdateDate"));
+                                        listSim.add(sim);
                                     }
                                 }
-                                isLoadMore = false;
+                                simAdapter.notifyDataSetChanged();
+                                if(response.optJSONObject("res").optJSONArray("sims").length()>0){
+                                    simAdapter.setLoaded();
+                                }
+
                             }else {
                                 tvSumSim.setText("0");
                             }

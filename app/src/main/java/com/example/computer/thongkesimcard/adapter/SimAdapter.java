@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.computer.thongkesimcard.R;
 import com.example.computer.thongkesimcard.listener.IOnItemClickedListener;
 import com.example.computer.thongkesimcard.listener.OnLoadMoreListener;
+import com.example.computer.thongkesimcard.obj.Sim;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +30,7 @@ import java.util.List;
 public class SimAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context context;
-    private JSONArray jsonData;
+    private List<Sim> listSim;
     private IOnItemClickedListener listener;
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
@@ -38,9 +39,9 @@ public class SimAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
 
-    public SimAdapter(RecyclerView recyclerView, Context context, JSONArray jsonData, IOnItemClickedListener listener){
+    public SimAdapter(RecyclerView recyclerView, Context context, List<Sim> listSim, IOnItemClickedListener listener){
         this.context = context;
-        this.jsonData = jsonData;
+        this.listSim = listSim;
         this.listener = listener;
         Log.d("getItem", getItemCount()+"");
 
@@ -67,7 +68,7 @@ public class SimAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemViewType(int position) {
-        return jsonData.optJSONObject(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return listSim.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     @Override
@@ -85,15 +86,15 @@ public class SimAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DishViewHolder) {
-            JSONObject jsonObject = jsonData.optJSONObject(position);
+            Sim sim = listSim.get(position);
             DishViewHolder dishViewHolder = (DishViewHolder) holder;
-            if(jsonObject != null){
-                String text = jsonObject.optString("simNumber").substring(jsonObject.optString("simNumber").length() - 5);
+            if(sim != null){
+                String text = sim.getName().substring(sim.getName().length() - 5);
                 dishViewHolder.tvNameSim.setText("..." + text);
-                dishViewHolder.tvSoDuNap.setText(formatMoney(jsonObject.optInt("accountBalance")));
-                dishViewHolder.tvSoDuMua.setText(formatMoney(jsonObject.optInt("clientAccountBalance")));
-                dishViewHolder.tvDateNap.setText(jsonObject.optString("lastUpdated"));
-                dishViewHolder.tvDateMua.setText(jsonObject.optString("clientUpdateDate"));
+                dishViewHolder.tvSoDuNap.setText(formatMoney(sim.getMoneyNap()));
+                dishViewHolder.tvSoDuMua.setText(formatMoney(sim.getMoneyMua()));
+                dishViewHolder.tvDateNap.setText(sim.getDateNap());
+                dishViewHolder.tvDateMua.setText(sim.getDateMua());
                 dishViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -109,7 +110,7 @@ public class SimAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return jsonData == null ? 0 : jsonData.length();
+        return listSim == null ? 0 : listSim.size();
     }
 
     public void setLoaded() {

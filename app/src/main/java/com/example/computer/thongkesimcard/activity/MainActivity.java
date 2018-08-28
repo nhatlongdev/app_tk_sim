@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*biến kiểm tra nhấn back 2 lần*/
     private boolean doubleBackToExitPressedOnce = false;
 
+    /*biến check trường hợp người dùng dùng click update thì gọi detect sim ==> gọi 101*/
+    public boolean clickUpdate = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,49 +130,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AppUtil.startActivity(this,ThongKeSimActivity.class);
                 break;
             case R.id.btn_update_tk_sim:
-                dialogUpdateSim = new Dialog(this);
-                dialogUpdateSim.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialogUpdateSim.setContentView(R.layout.dialog_msg_update_sim);
-                final Button btnYes, btnNo;
-                TextView tvMsg = dialogUpdateSim.findViewById(R.id.tv_msg);
-                btnYes = dialogUpdateSim.findViewById(R.id.btn_yes);
-                btnNo = dialogUpdateSim.findViewById(R.id.btn_no);
-
-                //set nội dung cho msg dialog
-                if(GlobalValue.jsonSimSelected != null && GlobalValue.jsonSimSelected.optString("serial_number") != null){
-                    tvMsg.setText("Bạn có muốn cập nhật tài khoản hiện tại cho sim " + GlobalValue.jsonSimSelected.optString("serial_number") + " không ?");
+                //GỌi lại detect sim
+                /*get infor sim, phone*/
+                clickUpdate = true;
+                int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 109);
+                } else {
+                    //TODO
+                    detectSimAndCreateJsonData();
                 }
-                btnYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogUpdateSim.dismiss();
-                        //GỌI *101#
-                        processUpdateTkSim();
-                    }
-                });
-
-                btnNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogUpdateSim.dismiss();
-                    }
-                });
-
-                Window window_switch_mode = dialogUpdateSim.getWindow();
-                window_switch_mode.setBackgroundDrawableResource(R.color.transparent);
-                window_switch_mode.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
-                window_switch_mode.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                WindowManager.LayoutParams wmlpMsgwindowSwitchMode = dialogUpdateSim.getWindow().getAttributes();
-                wmlpMsgwindowSwitchMode.gravity = Gravity.CENTER;
-                dialogUpdateSim.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        dialogUpdateSim.dismiss();
-                    }
-                });
-                dialogUpdateSim.setCancelable(false);
-                dialogUpdateSim.show();
                 break;
             case R.id.img_refresh:
                 //Gọi hàm getinforsum
@@ -209,6 +179,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             };
             handler.postDelayed(myTask,2000);
         }
+    }
+
+    //hàm xử lý click update
+    public void clickUpdate(){
+        dialogUpdateSim = new Dialog(this);
+        dialogUpdateSim.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogUpdateSim.setContentView(R.layout.dialog_msg_update_sim);
+        final Button btnYes, btnNo;
+        TextView tvMsg = dialogUpdateSim.findViewById(R.id.tv_msg);
+        btnYes = dialogUpdateSim.findViewById(R.id.btn_yes);
+        btnNo = dialogUpdateSim.findViewById(R.id.btn_no);
+
+        //set nội dung cho msg dialog
+        if(GlobalValue.jsonSimSelected != null && GlobalValue.jsonSimSelected.optString("serial_number") != null){
+            tvMsg.setText("Bạn có muốn cập nhật tài khoản hiện tại cho sim " + GlobalValue.jsonSimSelected.optString("serial_number") + " không ?");
+        }
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogUpdateSim.dismiss();
+
+                //GỌI *101#
+                processUpdateTkSim();
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogUpdateSim.dismiss();
+            }
+        });
+
+        Window window_switch_mode = dialogUpdateSim.getWindow();
+        window_switch_mode.setBackgroundDrawableResource(R.color.transparent);
+        window_switch_mode.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+        window_switch_mode.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        WindowManager.LayoutParams wmlpMsgwindowSwitchMode = dialogUpdateSim.getWindow().getAttributes();
+        wmlpMsgwindowSwitchMode.gravity = Gravity.CENTER;
+        dialogUpdateSim.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialogUpdateSim.dismiss();
+            }
+        });
+        dialogUpdateSim.setCancelable(false);
+        dialogUpdateSim.show();
     }
 
     /*call phone number*/
@@ -550,7 +568,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /*code chinh*/
         if(GlobalValue.jsonDataSim.length()>0) {
             GlobalValue.jsonSimSelected = GlobalValue.jsonDataSim.optJSONObject(0);
-            Log.d("log_app",GlobalValue.jsonSimSelected.toString());
+            Log.d("log_app","Vao day: " + GlobalValue.jsonSimSelected.toString());
+            if(clickUpdate == true){
+                Log.d("log_app","Vao day khi click update: " + GlobalValue.jsonSimSelected.toString());
+                clickUpdate = false;
+
+                clickUpdate();
+            }
+        }else {
+            if(clickUpdate == true){
+                clickUpdate = false;
+                Toast.makeText(this, "Cập nhật tài khoản chưa thành công, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
